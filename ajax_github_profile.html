@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+	integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="	sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+	<title>Ajax</title>
+</head>
+<body>
+	<div class="container"><br><br>
+
+		<div class="jumbotron">
+			<div class="form-group">
+				<form id="myf">
+					<label for="search" class="form-label"><h4>	Search For GitHub Users</h4></label>
+					<input type="text" name="search" class="form-control" id='search'>
+				</form>
+			</div>
+			<div id="d"></div>
+		</div>
+		
+		
+		<br><br><br><br>
+		<div class="alert alert-primary">
+			<h5 style="text-align: center;">
+				AJAX App Developed By :-<br>
+				Divyanshu Gautam (252CO15) & Dilkhush (250CO15)
+			</h5>
+		</div>
+		<br><br><br>
+	</div>
+	
+	<script type="text/javascript">
+		function aj(e) {
+			e.preventDefault();
+			var username = document.getElementById('search').value;
+			console.log(username+ " ,fetching results.....");
+			var x = new XMLHttpRequest();
+			x.onreadystatechange = function as() {
+				if(x.readyState == 4 && x.status == 200){
+					// var user = x.responseText;
+					// document.getElementById('d').innerHTML = user;
+
+					// using json
+					var user = JSON.parse(x.responseText);
+					document.getElementById('d').innerHTML = `
+
+					<div class="panel panel-default">
+						<div class='panel-heading'>
+							<h1 class='panel-title'>${user.name}</h1><br>
+						</div>
+						<div class='panel-body'>
+							<div class='row'>
+								<div class='col-md-3'>
+									<img style='width:100%' src='${user.avatar_url}'>
+									<br><br>
+									<span class="badge badge-primary" >Public Repos: ${user.public_repos}</span><br>
+									<span class='badge badge-danger' >Public Gists: ${user.public_gists}</span><br>
+									<span class='badge badge-success' >Followers : ${user.followers}</span><br>
+									<span class='badge badge-success' >Following : ${user.following}</span><br>
+								</div>
+								<div class='col-md-9'>
+									<ul class='list-group'>
+										<li class='list-group-item'>Website : ${user.blog}</li>
+										<li class='list-group-item'>Bio : ${user.bio}</li>
+										<li class='list-group-item'>Company : ${user.company}</li>
+										<li class='list-group-item'>User Location : ${user.location}</li>
+										<li class='list-group-item'>Email : ${user.email}</li>
+										<li class='list-group-item'>Active Since : ${user.created_at}</li>
+										<li class='list-group-item'>Last Activity : ${user.updated_at}</li>
+									</ul><br><br>
+									<a class="btn btn-success" href ="${user.html_url}">Visit Github</a><br><br>
+								</div>
+							</div>
+						</div>
+					</div>
+					`;					
+				}
+			}	
+			x.open('GET','https://api.github.com/users/'+username,true);
+			x.send();
+		}
+		document.getElementById('myf').addEventListener('submit',aj,false);
+	</script>
+</body>
+</html>	
